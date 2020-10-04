@@ -6,15 +6,30 @@
     <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css"
           integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
     {% block title %}
     {% endblock %}
 </head>
 <body>
-{% block head %}
-{% endblock %}
-{% block content %}
-{% endblock %}
-{% block footer %}
-{% endblock %}
+<div id="wrapper">
+    <div id="header">
+        <img src="{% static 'img/logo.png' %}" id="logo" alt="logo" title="logo" align="right" height="100%"/>
+    </div>
+    <div id="navigation">
+    </div>
+    <div id="leftcolumn">
+        {% include 'navi.html' %}
+    </div>
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <div id="footer">
+        {% block footer %}
+            <a href="mailto:kokot300@gmail.com">kokot300</a>
+        {% endblock %}
+    </div>
+
+</div>
 </body>
 </html>
