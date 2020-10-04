@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>{{ object.name }}</title>
+{% endblock %}
+
+{#{% block navigation %}#}
+{#    <div id="includedContent"></div>#}
+{#{% endblock %}#}
+
+{% block content %}
+    <table class="pure-table">
+        <tr>
+            <td><img src="/images/{{ object.image }}/"></td>
+            <td>
+                <ul class="pure-menu-list">
+                    <li class="pure-menu-item">{{ object.name }}</li>
+                    <li class="pure-menu-item">{{ object.description }}</li>
+                    <li class="pure-menu-item">{{ object.price_vat }}</li>
+                    <li class="pure-menu-item">
+                        {% if object.amount > 0 %}
+                            in stock
+                        {% else %}
+                            out of stock
+                        {% endif %}
+                    </li>
+                    <li class="pure-menu-item"><input type='button' value="buy now"/></li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+{% endblock %}

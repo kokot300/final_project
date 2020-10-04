@@ -31,6 +31,9 @@ class Rating(models.Model):
     product = models.ForeignKey(to='Product', on_delete=models.CASCADE)
     # author = None
 
+    def __str__(self):
+        return f'{self.product} score: {self.score}'
+
 
 class Category(models.Model):
     name = models.CharField(max_length=64)

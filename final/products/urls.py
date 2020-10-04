@@ -16,10 +16,11 @@ Including another URLconf
 
 from django.urls import path
 
-from .views import IndexView, AboutView, ContactView
+from .views import ShopView, CategoriesView, ProductDetailsView, ProductFilterView
 
 urlpatterns = [
-    path('', IndexView.as_view(), name='index'),
-    path('about/', AboutView.as_view(), name='about'),
-    path('contact/', ContactView.as_view(), name='contact'),
+    path('', ShopView.as_view(), name='product_list'),
+    path('categories/', CategoriesView.as_view(), name='category_list'),
+    path('<int:pk>/details/', ProductDetailsView.as_view(), name='product_details'),
+    path('search/', ProductFilterView.as_view(), name='product_search'),
 ]

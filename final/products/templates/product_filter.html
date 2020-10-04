@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Find a product</title>
+{% endblock %}
+
+{#{% block navigation %}#}
+{#    <div id="includedContent"></div>#}
+{#{% endblock %}#}
+
+{% block content %}
+    <form method="get">
+        {{ filter.form.as_p }}
+        <input type="submit" />
+    </form>
+    {% for obj in filter.qs %}
+        {{ obj.name }} - ${{ obj.price }}<br />
+    {% endfor %}
+{% endblock %}

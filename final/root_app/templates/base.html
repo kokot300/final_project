@@ -16,6 +16,25 @@
         <img src="{% static 'img/logo.png' %}" id="logo" alt="logo" title="logo" align="right" height="100%"/>
     </div>
     <div id="navigation">
+        <table class="pure-table pure-table-horizontal">
+            <tr>
+                <td>
+                    {% block navigation %}
+                    {% endblock %}
+                </td>
+                <td>
+                    {% if User.is_authenticated %}
+                        <p align="right">
+                            <a href="#">log out</a>
+                        </p>
+                    {% else %}
+                        <p>
+                            <a href="#">log in</a>
+                        </p>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
     </div>
     <div id="leftcolumn">
         {% include 'navi.html' %}
