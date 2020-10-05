@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, FormView
 
 from .filters import ProductFilter
 from .models import Product, Category
@@ -28,3 +28,6 @@ class ProductFilterView(View):
     def get(self, request):
         f = ProductFilter(request.GET, queryset=Product.objects.all())
         return render(request, 'product_filter.html', {'filter': f})
+
+
+

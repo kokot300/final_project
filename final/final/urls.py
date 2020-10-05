@@ -27,6 +27,8 @@ urlpatterns = [
 
     path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('img/favicon.png'))),
     path('robots.txt', RedirectView.as_view(url=staticfiles_storage.url('robots.txt'))),
+
+    path('accounts/', include('users.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

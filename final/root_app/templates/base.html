@@ -23,13 +23,13 @@
                     {% endblock %}
                 </td>
                 <td>
-                    {% if User.is_authenticated %}
+                    {% if user.is_authenticated %}
                         <p align="right">
-                            <a href="#">log out</a>
+                            <a href="{% url 'logout' %}">log out</a>
                         </p>
                     {% else %}
                         <p>
-                            <a href="#">log in</a>
+                            <a href="{% url 'login' %}">log in</a>
                         </p>
                     {% endif %}
                 </td>

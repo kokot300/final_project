@@ -6,5 +6,10 @@ from .models import Product
 class ProductFilter(FilterSet):
     class Meta:
         model = Product
-        # fields = '__all__'
-        exclude = 'image'
+        fields = {
+            'name': ['icontains'],
+            'description': ['icontains'],
+            'price_no_vat': ['lte', 'gte'],
+            'amount': ['lte', 'gte'],
+            'category': [],
+        }

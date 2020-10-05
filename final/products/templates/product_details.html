@@ -24,7 +24,9 @@
                             out of stock
                         {% endif %}
                     </li>
+                    {% if user.is_authenticated %}
                     <li class="pure-menu-item"><input type='button' value="buy now"/></li>
+                    {% endif %}
                 </ul>
             </td>
         </tr>

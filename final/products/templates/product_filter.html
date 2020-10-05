@@ -11,9 +11,12 @@
 {% block content %}
     <form method="get">
         {{ filter.form.as_p }}
-        <input type="submit" />
+        <input type="submit"/>
     </form>
-    {% for obj in filter.qs %}
-        {{ obj.name }} - ${{ obj.price }}<br />
-    {% endfor %}
+
+    <ul class="pure-menu-list">
+        {% for obj in filter.qs %}
+            <li class="pure-menu-item"><a href="{% url 'product_details' obj.pk %}"> {{ obj.name }}</a> - ${{ obj.price_vat }}<br/></li>
+        {% endfor %}
+    </ul>
 {% endblock %}
