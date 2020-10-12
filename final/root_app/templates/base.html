@@ -16,7 +16,7 @@
         <img src="{% static 'img/logo.png' %}" id="logo" alt="logo" title="logo" align="right" height="100%"/>
     </div>
     <div id="navigation">
-        <table class="pure-table pure-table-horizontal">
+        <table class="pure-table pure-table-horizontal" align="right">
             <tr>
                 <td>
                     {% block navigation %}
@@ -33,6 +33,15 @@
                         </p>
                     {% endif %}
                 </td>
+                {% if user.is_authenticated %}
+                    <td>
+
+                        <p align="right">
+                            <a href="{% url 'card' %}">card</a>
+                        </p>
+
+                    </td>
+                {% endif %}
             </tr>
         </table>
     </div>

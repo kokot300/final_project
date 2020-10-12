@@ -4,9 +4,9 @@
     <title>Shop</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-    $(function(){
-      $("#includedContent").load("categories/");
-    });
+        $(function () {
+            $("#includedContent").load("categories/");
+        });
     </script>
 {% endblock %}
 
@@ -16,19 +16,37 @@
 
 {% block content %}
     <table class="pure-table">
-    <tr>
-    <td>
-    <ul class="pure-menu-list">
-        {% for product in object_list %}
-            <li class="pure-menu-item"><a href="{% url 'product_details' product.pk %}" class="pure-menu-link">{{ product.name }}<img
-                    src="/images/{{ product.image }}" width="50px" height="50px" alt="{{ product.name }}"
-                    title="{{ product.name }}"/></a></li>
-        {% endfor %}
-    </ul>
-    </td>
-    <td>
-        <a href="{% url 'product_search' %}">search</a>
-    </td>
-    </tr>
+        <tr>
+            <td>
+                <ul class="pure-menu-list">
+                    {% for product in object_list %}
+                        <li class="pure-menu-item"><a href="{% url 'product_details' product.pk %}"
+                                                      class="pure-menu-link">{{ product.name }}<img
+                                src="/images/{{ product.image }}" width="50px" height="50px" alt="{{ product.name }}"
+                                title="{{ product.name }}"/></a></li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <a href="{% url 'product_search' %}">search</a>
+            </td>
+        </tr>
     </table>
+    <div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+    </div>
 {% endblock %}

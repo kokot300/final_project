@@ -1,9 +1,10 @@
-from django_filters import FilterSet
+from django_filters import FilterSet, ModelChoiceFilter
 
-from .models import Product
+from .models import Product, Category
 
 
 class ProductFilter(FilterSet):
+    category = ModelChoiceFilter(queryset=Category.objects.all())
     class Meta:
         model = Product
         fields = {
@@ -11,5 +12,5 @@ class ProductFilter(FilterSet):
             'description': ['icontains'],
             'price_no_vat': ['lte', 'gte'],
             'amount': ['lte', 'gte'],
-            'category': [],
+            # 'category__name': ['exact'],
         }

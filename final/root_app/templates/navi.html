@@ -3,7 +3,10 @@
         <li class="pure-menu-item"><a class="pure-menu-link" href="/">Main</a></li>
         <li class="pure-menu-item"><a class="pure-menu-link" href="{% url 'product_list' %}">Shop</a></li>
         <li class="pure-menu-item"><a class="pure-menu-link" href="{% url 'about' %}">About</a></li>
-{#        <li class="pure-menu-item"><a class="pure-menu-link" href="/news/">News</a></li>#}
+        {#        <li class="pure-menu-item"><a class="pure-menu-link" href="/news/">News</a></li>#}
         <li class="pure-menu-item"><a class="pure-menu-link" href="{% url 'contact' %}">Contact</a></li>
+        {% if user.is_authenticated %}
+            <li class="pure-menu-item"><a class="pure-menu-link" href="{% url 'user_profile' %}">Profile</a></li>
+        {% endif %}
     </ul>
 </nav>

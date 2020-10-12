@@ -1,3 +1,6 @@
+from datetime import datetime
+
+from django.conf import settings
 from django.db import models
 
 
@@ -23,12 +26,29 @@ class Product(models.Model):
         return self.name
 
 
+class OrderItem(models.Model):
+    item = models.ForeignKey(to='Product', on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+
+    def __str__(self):
+        return f'{self.item.name}'
+
+
+class Order(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    item = models.ManyToManyField(to='OrderItem')
+    start_date = models.DateTimeField(auto_now_add=True)
+    ordered_date = models.DateTimeField(auto_now=True)
+    ordered = models.BooleanField(default=False)
+
+
 class Rating(models.Model):
     score = models.IntegerField()
     description = models.TextField()
     add_date = models.DateField(auto_now_add=True)
     mod_date = models.DateField(auto_now=True)
     product = models.ForeignKey(to='Product', on_delete=models.CASCADE)
+
     # author = None
 
     def __str__(self):
@@ -44,7 +64,3 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class Order(models.Model):
-    pass

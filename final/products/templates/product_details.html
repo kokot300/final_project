@@ -19,13 +19,24 @@
                     <li class="pure-menu-item">{{ object.price_vat }}</li>
                     <li class="pure-menu-item">
                         {% if object.amount > 0 %}
-                            in stock
+                            in stock {{ object.amount }}
                         {% else %}
                             out of stock
                         {% endif %}
                     </li>
                     {% if user.is_authenticated %}
-                    <li class="pure-menu-item"><input type='button' value="buy now"/></li>
+                        <li class="pure-menu-item">
+                            <form method="post" action="{% url 'add_to_card' %}" class="pure-form pure-form-stacked">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{ object.pk }}" name="product" id="product"/>
+                                <label for="quantity">how much?</label>
+                                <input type="number" min="1" max="{{ object.amount }}" name="quantity" id="quantity"
+                                       value="1">
+                                <button type="submit">buy now</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li class="pure-menu-item"><a href="{% url 'login' %}">login to buy!</a></li>
                     {% endif %}
                 </ul>
             </td>

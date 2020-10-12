@@ -14,13 +14,13 @@
     <ul class="pure-menu-list">
         {% for category in object_list %}
             {% if category.parent_category is None %}
-                <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover"><a href="#"
+                <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover"><a href="/products/search/?name__icontains=&description__icontains=&price_no_vat__lte=&price_no_vat__gte=&amount__lte=&amount__gte=&category__name=&category={{ category.pk }}"
                                                                                            class="pure-menu-link">{{ category.name }}</a>
                     <ul class="pure-menu-children">
                         {% for subcategory in object_list %}
                             {% if subcategory.parent_category == category %}
                                 <li class="pure-menu-item">
-                                    <a href="#" class="pure-menu-link">{{ subcategory.name }}</a>
+                                    <a href="/products/search/?name__icontains=&description__icontains=&price_no_vat__lte=&price_no_vat__gte=&amount__lte=&amount__gte=&category__name=&category={{ subcategory.pk }}" class="pure-menu-link">{{ subcategory.name }}</a>
                                 </li>
                             {% endif %}
                         {% endfor %}

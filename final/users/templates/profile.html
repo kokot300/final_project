@@ -6,4 +6,9 @@
         <li class="pure-menu-item">{{ user.last_name }}</li>
         <li class="pure-menu-item">{{ user.email }}</li>
     </ul>
+
+    <ul class="pure-menu-list">
+        <li class="pure-menu-item"><a href="{% url 'user_profile_create' %}">create profile</a> </li>
+    </ul>
+
 {% endblock %}
