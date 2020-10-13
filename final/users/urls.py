@@ -9,7 +9,7 @@ Including another URLconf
 from django.contrib.auth import views as auth_views
 from django.urls import path
 
-from .views import RegisterUserView, UserProfileView, CreateUserProfileView
+from .views import RegisterUserView, UserProfileView, CreateUserProfileView, UserAddressesView, CreateAddressView
 
 urlpatterns = [
     # path('', include('django.contrib.auth.urls')),
@@ -38,5 +38,8 @@ urlpatterns = [
     path('register/', RegisterUserView.as_view(), name='register_user'),
     path('profile/', UserProfileView.as_view(), name='user_profile'),
     path('profile/create/', CreateUserProfileView.as_view(), name='user_profile_create'),
+
+    path('addresses', UserAddressesView.as_view(), name='addresses'),
+    path('address/create/', CreateAddressView.as_view(), name='create_address'),
 
 ]

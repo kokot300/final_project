@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.conf import settings
 from django.db import models
 
@@ -22,6 +20,16 @@ class Product(models.Model):
     def price_vat(self):
         return self.price_no_vat * (1 + (self.vat / 100))
 
+    @property
+    def average_rating(self):
+        result = 0
+        ratings = Rating.objects.filter(product=self.id)
+        ratings_count = Rating.objects.filter(product=self.id).count()
+        for rating in ratings:
+            result += rating.score
+        result /= ratings_count
+        return result
+
     def __str__(self):
         return self.name
 
@@ -40,6 +48,16 @@ class Order(models.Model):
     start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField(auto_now=True)
     ordered = models.BooleanField(default=False)
+
+    @property
+    def total(self):
+        total_to_pay = 0
+        order = Order.objects.get(pk=self.id)
+        for item in order.item.all():
+            product = Product.objects.get(pk=item.item.pk)
+            subprice = product.price_vat * item.quantity
+            total_to_pay += subprice
+        return total_to_pay
 
 
 class Rating(models.Model):

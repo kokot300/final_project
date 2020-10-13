@@ -4,7 +4,7 @@
     <table class="pure-table">
         <tr>
             {% for order in object_list %}
-                {% if user.pk == order.user.pk %}
+                {% if user.pk == order.user.pk and order.ordered is False %}
                     <td>
                         <ul class="pure-menu-list">
                             <ul class="pure-menu-list">
@@ -12,14 +12,15 @@
                                 <li class="pure-menu-item"> created: {{ order.start_date }} </li>
                                 <li class="pure-menu-item">ordered: {{ order.ordered }}</li>
                                 <li class="pure-menu-item">
-                                <br>
+                                    <br>
                                     <b>items:</b>
                                     <ol class="pure-menu-list">
                                         {% for i in order.item.all %}
-                                            <li class="pure-menu-item">{{ i }}</li>
+                                            <li class="pure-menu-item">{{ i }} {{ i.quantity }}</li>
                                         {% endfor %}
                                     </ol>
                                 </li>
+                                <li class="pure-menu-item">total: {{ order.total }} </li>
                             </ul>
                         </ul>
                     </td>
