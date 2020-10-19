@@ -4,25 +4,31 @@
     <table class="pure-table">
         <tr>
             {% for order in object_list %}
-                {% if user.pk == order.user.pk and order.ordered is False %}
+                {% if order.ordered is False %}
                     <td>
                         <ul class="pure-menu-list">
-                            <ul class="pure-menu-list">
-                                <li class="pure-menu-item">User: {{ order.user }}</li>
-                                <li class="pure-menu-item"> created: {{ order.start_date }} </li>
-                                <li class="pure-menu-item">ordered: {{ order.ordered }}</li>
-                                <li class="pure-menu-item">
-                                    <br>
-                                    <b>items:</b>
-                                    <ol class="pure-menu-list">
-                                        {% for i in order.item.all %}
-                                            <li class="pure-menu-item">{{ i }} {{ i.quantity }}</li>
-                                        {% endfor %}
-                                    </ol>
-                                </li>
-                                <li class="pure-menu-item">total: {{ order.total }} </li>
-                            </ul>
+                            <li class="pure-menu-item">User: {{ order.user }}</li>
+                            <li class="pure-menu-item"> created: {{ order.start_date }} </li>
+                            <li class="pure-menu-item">ordered: {{ order.ordered }}</li>
+                            <li class="pure-menu-item">
+                                <br>
+                                <b>items:</b>
+                                <ol class="pure-menu-list">
+                                    {% for i in order.item.all %}
+                                        <li class="pure-menu-item">{{ i }} {{ i.quantity }}</li>
+                                    {% endfor %}
+                                </ol>
+                            </li>
+                            <li class="pure-menu-item">total: {{ order.total }} </li>
+                            <li class="pure-menu-item">ship to: {{ order.address }} </li>
                         </ul>
+                        {% if not order.address %}
+                            <form class="" method="get" action="{% url 'add_address' order.pk %}">
+                                {#                            {% csrf_token %}#}
+                                <input type="hidden" value="{{ order.pk }}" name="order_id" id="order_id">
+                                <button type="submit">order</button>
+                            </form>
+                        {% endif %}
                     </td>
                 {% endif %}
             {% endfor %}

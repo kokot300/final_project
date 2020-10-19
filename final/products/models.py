@@ -1,5 +1,8 @@
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
+
+from users.models import Address
 
 
 # Create your models here.
@@ -47,7 +50,16 @@ class Order(models.Model):
     item = models.ManyToManyField(to='OrderItem')
     start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField(auto_now=True)
-    ordered = models.BooleanField(default=False)
+    # ordered = models.BooleanField(default=False)
+    address = models.ForeignKey(to=Address, on_delete=models.CASCADE, null=True, blank=True)
+
+
+    @property
+    def ordered(self):
+        if self.address is not None:
+            return True
+        else:
+            return False
 
     @property
     def total(self):
@@ -58,6 +70,9 @@ class Order(models.Model):
             subprice = product.price_vat * item.quantity
             total_to_pay += subprice
         return total_to_pay
+
+    def get_absolute_url(self):
+        return reverse('card')
 
 
 class Rating(models.Model):

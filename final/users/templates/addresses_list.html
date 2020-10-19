@@ -3,23 +3,23 @@
 {% block content %}
     <table class="pure-table">
         <tr>
-            <td>
-                <ul class="pure-menu-list">
-                    {% for address in object_list %}
-                        {% if address.profile.user == user %}
-                        <li class="pure-menu-item">{{ address.address_line_1 }}</li>
-                        <li class="pure-menu-item">{{ address.address_line_2 }}</li>
-                        <li class="pure-menu-item">{{ address.city }} {{ address.zip_code }}</li>
-                        <li class="pure-menu-item">{{ address.country }}</li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            </td>
+            {% for address in object_list %}
+                {% if address.profile.user == user %}
+                    <td>
+                        <ul class="pure-menu-list">
+                            <li class="pure-menu-item">{{ address.address_line_1 }}</li>
+                            <li class="pure-menu-item">{{ address.address_line_2 }}</li>
+                            <li class="pure-menu-item">{{ address.city }} {{ address.zip_code }}</li>
+                            <li class="pure-menu-item">{{ address.country }}</li>
+                        </ul>
+                    </td>
+                {% endif %}
+            {% endfor %}
         </tr>
     </table>
 
-     <ul class="pure-menu-list">
-        <li class="pure-menu-item"><a href="{% url 'create_address' %}">add address</a> </li>
+    <ul class="pure-menu-list">
+        <li class="pure-menu-item"><a href="{% url 'create_address' %}">add address</a></li>
     </ul>
 
     <div class="pagination">

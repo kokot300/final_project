@@ -16,7 +16,7 @@ Including another URLconf
 
 from django.urls import path
 
-from .views import ShopView, CategoriesView, ProductDetailsView, ProductFilterView, AddToCardView, CardView
+from .views import ShopView, CategoriesView, ProductDetailsView, ProductFilterView, AddToCardView, CardView, AddAddressToOrderView
 
 urlpatterns = [
     path('', ShopView.as_view(), name='product_list'),
@@ -25,4 +25,5 @@ urlpatterns = [
     path('search/', ProductFilterView.as_view(), name='product_search'),
     path('add_to_card/', AddToCardView.as_view(), name='add_to_card'),
     path('card/', CardView.as_view(), name='card'),
+    path('<int:pk>/add_address/', AddAddressToOrderView.as_view(), name='add_address'),
 ]

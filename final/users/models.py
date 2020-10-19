@@ -11,9 +11,13 @@ class UserProfile(models.Model):
 
 
 class Address(models.Model):
+    name = models.CharField(max_length=63)
     address_line_1 = models.CharField(max_length=123)
     address_line_2 = models.CharField(max_length=123)
     city = models.CharField(max_length=63)
     zip_code = models.IntegerField()
     country = models.CharField(max_length=31)
     profile = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name

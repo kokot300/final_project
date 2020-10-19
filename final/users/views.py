@@ -1,6 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
@@ -67,7 +66,11 @@ class UserProfileView(LoginRequiredMixin, View):
     login_url = '/accounts/login/'
 
     def get(self, request):
-        return render(request, 'profile.html', {})
+        profile = UserProfile.objects.get(pk=request.user.pk)
+        ctx = {
+            'profile': profile,
+        }
+        return render(request, 'profile.html', ctx)
 
 
 class UserAddressesView(LoginRequiredMixin, ListView):

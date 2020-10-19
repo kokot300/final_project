@@ -4,6 +4,9 @@ from .models import Product, Category
 
 
 class ProductFilter(FilterSet):
+    """
+    generates filterset for product model
+    """
     category = ModelChoiceFilter(queryset=Category.objects.all())
     class Meta:
         model = Product
