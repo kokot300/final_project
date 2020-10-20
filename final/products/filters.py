@@ -8,7 +8,11 @@ class ProductFilter(FilterSet):
     generates filterset for product model
     """
     category = ModelChoiceFilter(queryset=Category.objects.all())
+
     class Meta:
+        """
+        specifies model to be used and fields.
+        """
         model = Product
         fields = {
             'name': ['icontains'],

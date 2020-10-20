@@ -1,10 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.db.models import ObjectDoesNotExist
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView
-from django.contrib.auth.models import User
-
 
 from .filters import ProductFilter
 from .forms import AddAddressForm
@@ -43,6 +42,7 @@ class ProductFilterView(View):
     """
     filters products by almost any field
     """
+
     def get(self, request):
         """
         displays the filter form and results.
@@ -55,6 +55,7 @@ class AddToCardView(LoginRequiredMixin, View):
     """
     view with no template. makes logic of adding a product to card and redirects to detail of desired product.
     """
+
     def post(self, request):
         """
         adds item to card or increases the number of ordered item. redirects to detail view of item
@@ -67,7 +68,6 @@ class AddToCardView(LoginRequiredMixin, View):
             item.save()
         order_item = OrderItem.objects.create(item=item)
         order_item.quantity = int(request.POST.__getitem__('quantity'))
-        print(order_item.quantity)
         order_qs = Order.objects.filter(user=request.user, address=None)
         if order_qs.exists():
             order = order_qs[0]

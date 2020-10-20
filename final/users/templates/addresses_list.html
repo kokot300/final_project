@@ -4,7 +4,6 @@
     <table class="pure-table">
         <tr>
             {% for address in object_list %}
-                {% if address.profile.user == user %}
                     <td>
                         <ul class="pure-menu-list">
                             <li class="pure-menu-item">{{ address.address_line_1 }}</li>
@@ -13,7 +12,6 @@
                             <li class="pure-menu-item">{{ address.country }}</li>
                         </ul>
                     </td>
-                {% endif %}
             {% endfor %}
         </tr>
     </table>

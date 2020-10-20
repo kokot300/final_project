@@ -5,12 +5,18 @@ from django.db import models
 # Create your models here.
 
 class UserProfile(models.Model):
+    """
+    one to one model to bind to User
+    """
     phone = models.IntegerField()
     birth_date = models.DateField()
     user = models.OneToOneField(to=User, on_delete=models.CASCADE)
 
 
 class Address(models.Model):
+    """
+    many to many to UserProfile. every user can have more than 1 address.
+    """
     name = models.CharField(max_length=63)
     address_line_1 = models.CharField(max_length=123)
     address_line_2 = models.CharField(max_length=123)

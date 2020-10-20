@@ -13,11 +13,17 @@ from .models import UserProfile, Address
 
 
 class RegisterUserView(FormView):
+    """
+    serves the new user registration form
+    """
     form_class = CreateUserForm
     template_name = 'registration/register.html'
     success_url = '/accounts/login/'
 
     def form_valid(self, form):
+        """
+        overrides default form_valid method
+        """
         form = CreateUserForm(self.request.POST)
         if form.is_valid():
             form.save()
@@ -25,6 +31,9 @@ class RegisterUserView(FormView):
 
 
 class CreateUserProfileView(LoginRequiredMixin, CreateView):
+    """
+    creates profile for user.
+    """
     model = UserProfile
     template_name = 'registration/profile.html'
     success_url = '/accounts/profile/'
@@ -34,12 +43,18 @@ class CreateUserProfileView(LoginRequiredMixin, CreateView):
     ]
 
     def form_valid(self, form):
+        """
+        overrides default form_valid method. it prevents profile creation for another user
+        """
         user = User.objects.get(id=self.request.user.id)
         form.instance.user = user
         return super(CreateUserProfileView, self).form_valid(form)
 
 
 class CreateAddressView(LoginRequiredMixin, CreateView):
+    """
+    creates new address for a user
+    """
     model = Address
     template_name = 'create_address.html'
     success_url = reverse_lazy('addresses')
@@ -52,6 +67,9 @@ class CreateAddressView(LoginRequiredMixin, CreateView):
     ]
 
     def form_valid(self, form):
+        """
+        overrides default form_valid method. it prevents profile creation for another user
+        """
         # print(self.request.user.id)
         user = User.objects.get(id=self.request.user.id)
         profile = UserProfile.objects.get(user=user)
@@ -63,9 +81,15 @@ class CreateAddressView(LoginRequiredMixin, CreateView):
 
 
 class UserProfileView(LoginRequiredMixin, View):
+    """
+    shows to user his profile
+    """
     login_url = '/accounts/login/'
 
     def get(self, request):
+        """
+        manages get requests
+        """
         profile = UserProfile.objects.get(pk=request.user.pk)
         ctx = {
             'profile': profile,
@@ -74,6 +98,17 @@ class UserProfileView(LoginRequiredMixin, View):
 
 
 class UserAddressesView(LoginRequiredMixin, ListView):
+    """
+    shows to user his addresses
+    """
     model = Address
     template_name = 'addresses_list.html'
     paginate_by = 5
+
+    def get_queryset(self):
+        """
+        filters out addresses that doesn't belong to logged user
+        """
+        user = User.objects.get(pk=self.request.user.pk)
+        profile = UserProfile.objects.get(user=user)
+        return Address.objects.filter(profile=profile)
