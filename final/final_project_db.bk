@@ -404,7 +404,11 @@ ALTER SEQUENCE public.products_category_id_seq OWNED BY public.products_category
 --
 
 CREATE TABLE public.products_order (
-    id integer NOT NULL
+    id integer NOT NULL,
+    ordered_date timestamp with time zone NOT NULL,
+    start_date timestamp with time zone NOT NULL,
+    user_id integer NOT NULL,
+    address_id integer
 );
 
 
@@ -430,6 +434,76 @@ ALTER TABLE public.products_order_id_seq OWNER TO kokot300;
 --
 
 ALTER SEQUENCE public.products_order_id_seq OWNED BY public.products_order.id;
+
+
+--
+-- Name: products_order_item; Type: TABLE; Schema: public; Owner: kokot300
+--
+
+CREATE TABLE public.products_order_item (
+    id integer NOT NULL,
+    order_id integer NOT NULL,
+    orderitem_id integer NOT NULL
+);
+
+
+ALTER TABLE public.products_order_item OWNER TO kokot300;
+
+--
+-- Name: products_order_item_id_seq; Type: SEQUENCE; Schema: public; Owner: kokot300
+--
+
+CREATE SEQUENCE public.products_order_item_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.products_order_item_id_seq OWNER TO kokot300;
+
+--
+-- Name: products_order_item_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kokot300
+--
+
+ALTER SEQUENCE public.products_order_item_id_seq OWNED BY public.products_order_item.id;
+
+
+--
+-- Name: products_orderitem; Type: TABLE; Schema: public; Owner: kokot300
+--
+
+CREATE TABLE public.products_orderitem (
+    id integer NOT NULL,
+    quantity integer NOT NULL,
+    item_id integer NOT NULL
+);
+
+
+ALTER TABLE public.products_orderitem OWNER TO kokot300;
+
+--
+-- Name: products_orderitem_id_seq; Type: SEQUENCE; Schema: public; Owner: kokot300
+--
+
+CREATE SEQUENCE public.products_orderitem_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.products_orderitem_id_seq OWNER TO kokot300;
+
+--
+-- Name: products_orderitem_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kokot300
+--
+
+ALTER SEQUENCE public.products_orderitem_id_seq OWNED BY public.products_orderitem.id;
 
 
 --
@@ -548,6 +622,82 @@ ALTER SEQUENCE public.products_rating_id_seq OWNED BY public.products_rating.id;
 
 
 --
+-- Name: users_address; Type: TABLE; Schema: public; Owner: kokot300
+--
+
+CREATE TABLE public.users_address (
+    id integer NOT NULL,
+    address_line_1 character varying(123) NOT NULL,
+    address_line_2 character varying(123) NOT NULL,
+    city character varying(63) NOT NULL,
+    zip_code integer NOT NULL,
+    country character varying(31) NOT NULL,
+    profile_id integer NOT NULL,
+    name character varying(63) NOT NULL
+);
+
+
+ALTER TABLE public.users_address OWNER TO kokot300;
+
+--
+-- Name: users_address_id_seq; Type: SEQUENCE; Schema: public; Owner: kokot300
+--
+
+CREATE SEQUENCE public.users_address_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_address_id_seq OWNER TO kokot300;
+
+--
+-- Name: users_address_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kokot300
+--
+
+ALTER SEQUENCE public.users_address_id_seq OWNED BY public.users_address.id;
+
+
+--
+-- Name: users_userprofile; Type: TABLE; Schema: public; Owner: kokot300
+--
+
+CREATE TABLE public.users_userprofile (
+    id integer NOT NULL,
+    phone integer NOT NULL,
+    birth_date date NOT NULL,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE public.users_userprofile OWNER TO kokot300;
+
+--
+-- Name: users_userprofile_id_seq; Type: SEQUENCE; Schema: public; Owner: kokot300
+--
+
+CREATE SEQUENCE public.users_userprofile_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_userprofile_id_seq OWNER TO kokot300;
+
+--
+-- Name: users_userprofile_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kokot300
+--
+
+ALTER SEQUENCE public.users_userprofile_id_seq OWNED BY public.users_userprofile.id;
+
+
+--
 -- Name: auth_group id; Type: DEFAULT; Schema: public; Owner: kokot300
 --
 
@@ -625,6 +775,20 @@ ALTER TABLE ONLY public.products_order ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
+-- Name: products_order_item id; Type: DEFAULT; Schema: public; Owner: kokot300
+--
+
+ALTER TABLE ONLY public.products_order_item ALTER COLUMN id SET DEFAULT nextval('public.products_order_item_id_seq'::regclass);
+
+
+--
+-- Name: products_orderitem id; Type: DEFAULT; Schema: public; Owner: kokot300
+--
+
+ALTER TABLE ONLY public.products_orderitem ALTER COLUMN id SET DEFAULT nextval('public.products_orderitem_id_seq'::regclass);
+
+
+--
 -- Name: products_product id; Type: DEFAULT; Schema: public; Owner: kokot300
 --
 
@@ -643,6 +807,20 @@ ALTER TABLE ONLY public.products_product_category ALTER COLUMN id SET DEFAULT ne
 --
 
 ALTER TABLE ONLY public.products_rating ALTER COLUMN id SET DEFAULT nextval('public.products_rating_id_seq'::regclass);
+
+
+--
+-- Name: users_address id; Type: DEFAULT; Schema: public; Owner: kokot300
+--
+
+ALTER TABLE ONLY public.users_address ALTER COLUMN id SET DEFAULT nextval('public.users_address_id_seq'::regclass);
+
+
+--
+-- Name: users_userprofile id; Type: DEFAULT; Schema: public; Owner: kokot300
+--
+
+ALTER TABLE ONLY public.users_userprofile ALTER COLUMN id SET DEFAULT nextval('public.users_userprofile_id_seq'::regclass);
 
 
 --
@@ -706,6 +884,18 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 38	Can change product	10	change_product
 39	Can delete product	10	delete_product
 40	Can view product	10	view_product
+41	Can add user profile	11	add_userprofile
+42	Can change user profile	11	change_userprofile
+43	Can delete user profile	11	delete_userprofile
+44	Can view user profile	11	view_userprofile
+45	Can add address	12	add_address
+46	Can change address	12	change_address
+47	Can delete address	12	delete_address
+48	Can view address	12	view_address
+49	Can add order item	13	add_orderitem
+50	Can change order item	13	change_orderitem
+51	Can delete order item	13	delete_orderitem
+52	Can view order item	13	view_orderitem
 \.
 
 
@@ -714,7 +904,10 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 --
 
 COPY public.auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
-1	pbkdf2_sha256$216000$fp5wusJWbGLx$Ym6wVtJkUHdl+Xi+LJ4GzAb5fOvYA1M7y+9qvhbYGr0=	2020-10-04 12:49:22.551333+02	t	kokot300			kokot300@gmail.com	t	t	2020-10-04 12:49:02.182485+02
+1	pbkdf2_sha256$216000$fp5wusJWbGLx$Ym6wVtJkUHdl+Xi+LJ4GzAb5fOvYA1M7y+9qvhbYGr0=	2020-10-05 19:49:05.179616+02	t	kokot300			kokot300@gmail.com	t	t	2020-10-04 12:49:02.182485+02
+3	pbkdf2_sha256$216000$KbKvAoWnUP0E$30nezHPyfX/PS3arEY9uqxe2CG3jSt6wzLEW7bWQ3Pc=	\N	f	abc	a	a	a@a.com	f	t	2020-10-11 14:17:01.702562+02
+4	pbkdf2_sha256$216000$RMZqOvW3uoyb$QtgDrfo0PagkaRZ78SImdQIahIb7XKo4NEBXWGvlW1Y=	2020-10-13 17:41:01.424194+02	f	abcc	a	a	a@a.com	f	t	2020-10-11 14:35:37.41848+02
+2	pbkdf2_sha256$216000$8cL136XVPmbL$NDTVJeo0GK4oQgCvUKqwtaPbkadIuyHMK2M7MKzD+VU=	2020-10-17 11:45:32.12226+02	f	kokot	Krzysztof	Kokot	kokot@gmail.com	f	t	2020-10-05 18:50:08+02
 \.
 
 
@@ -767,6 +960,15 @@ COPY public.django_admin_log (id, action_time, object_id, object_repr, action_fl
 26	2020-10-04 13:47:48.030026+02	5	Glock gen 5	2	[{"changed": {"fields": ["Category"]}}]	10	1
 27	2020-10-04 13:49:15.740876+02	15	Shower	1	[{"added": {}}]	10	1
 28	2020-10-04 13:50:31.976309+02	16	Bathtub	1	[{"added": {}}]	10	1
+29	2020-10-04 14:06:04.462504+02	1	Rating object (1)	1	[{"added": {}}]	8	1
+30	2020-10-04 14:06:16.111955+02	2	Rating object (2)	1	[{"added": {}}]	8	1
+31	2020-10-04 14:06:26.405112+02	3	Rating object (3)	1	[{"added": {}}]	8	1
+32	2020-10-04 14:06:36.567424+02	4	Rating object (4)	1	[{"added": {}}]	8	1
+33	2020-10-04 14:07:19.058848+02	5	Rating object (5)	1	[{"added": {}}]	8	1
+34	2020-10-04 14:29:52.837447+02	5	Glock gen 5	2	[{"changed": {"fields": ["Image"]}}]	10	1
+35	2020-10-05 19:49:23.433639+02	2	kokot	2	[{"changed": {"fields": ["Email address"]}}]	4	1
+36	2020-10-05 19:50:40.449835+02	2	kokot	2	[]	4	1
+37	2020-10-05 19:51:01.53269+02	2	kokot	2	[{"changed": {"fields": ["First name", "Last name"]}}]	4	1
 \.
 
 
@@ -785,6 +987,9 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 8	products	rating
 9	products	category
 10	products	product
+11	users	userprofile
+12	users	address
+13	products	orderitem
 \.
 
 
@@ -816,6 +1021,14 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 21	products	0003_auto_20201004_1306	2020-10-04 13:06:39.578807+02
 22	products	0004_auto_20201004_1316	2020-10-04 13:17:04.380135+02
 23	products	0005_auto_20201004_1323	2020-10-04 13:23:47.499248+02
+24	users	0001_initial	2020-10-11 14:27:24.032136+02
+25	products	0006_orderitem	2020-10-12 16:50:28.385235+02
+26	products	0006_auto_20201012_1704	2020-10-12 17:07:39.544929+02
+27	products	0007_auto_20201012_1708	2020-10-12 17:08:12.696071+02
+28	products	0008_auto_20201012_1818	2020-10-12 18:18:32.908543+02
+29	products	0009_order_address	2020-10-14 15:11:48.52973+02
+30	users	0002_address_name	2020-10-15 17:14:32.487489+02
+31	products	0010_remove_order_ordered	2020-10-16 09:38:29.064793+02
 \.
 
 
@@ -824,7 +1037,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 --
 
 COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
-ybeze4bqzgkqeomwst9sig27vzunozx4	.eJxVjMsOwiAUBf-FtSGFChdduu83kPsAqRqalHZl_HdD0oVuz8yct4q4byXuLa1xFnVVRp1-N0J-ptqBPLDeF81L3daZdFf0QZueFkmv2-H-HRRspdd-GCWYHCSIOHA5AztvUmbLbDyBACZrs8UByZNBPF8g5ABWLIxk1OcLBNM4lA:1kP1Zy:vLR0Vn40lM7PizFbrz_hXVCqKfgKo7E8UWCS2P5dYRk	2020-10-18 12:49:22.623149+02
+ytg23ee7py3ogyfzjvqs7p492lcezwf7	.eJxVjM0OgjAQhN-lZyXQ0tL16N1naHa7i_gTaiio0fjuQsKFyxzmm2--Kjww51caOAySZQxjukmvDgrp-baffVUbaMhr77WpdBTDlQHQLFC2YKNXOxVwGrswZRnChWdTbzvCOD8ugK_Yn1MRUz8OFyqWSbHSXJwSy_24bjcHHeZutsl4KJ0GbutICLZpRIsXAbKudh6tyBwYW4fCjolKaxh8BUIl1WTU7w-cLk09:1kTimK:SYp_ylSOT6HbxtTnJ_Qo7BLCsCWSjPnOo3sXOKsGplY	2020-10-31 10:45:32.173227+01
 \.
 
 
@@ -849,7 +1062,120 @@ COPY public.products_category (id, name, description, parent_category_id) FROM s
 -- Data for Name: products_order; Type: TABLE DATA; Schema: public; Owner: kokot300
 --
 
-COPY public.products_order (id) FROM stdin;
+COPY public.products_order (id, ordered_date, start_date, user_id, address_id) FROM stdin;
+2	2020-10-12 17:49:26.485008+02	2020-10-12 17:49:26.922237+02	4	\N
+4	2020-10-12 20:40:32.562+02	2020-10-12 20:40:34.871+02	4	\N
+3	2020-10-16 09:28:32.662387+02	2020-10-12 20:40:11.812+02	2	4
+6	2020-10-16 09:35:36.810991+02	2020-10-16 09:35:13.077544+02	2	4
+7	2020-10-17 11:18:46.788563+02	2020-10-16 09:42:43.627568+02	2	\N
+\.
+
+
+--
+-- Data for Name: products_order_item; Type: TABLE DATA; Schema: public; Owner: kokot300
+--
+
+COPY public.products_order_item (id, order_id, orderitem_id) FROM stdin;
+1	2	19
+2	2	22
+3	2	32
+13	3	68
+14	3	74
+15	3	76
+16	3	77
+17	6	79
+18	7	81
+19	7	82
+\.
+
+
+--
+-- Data for Name: products_orderitem; Type: TABLE DATA; Schema: public; Owner: kokot300
+--
+
+COPY public.products_orderitem (id, quantity, item_id) FROM stdin;
+1	1	6
+2	1	6
+3	1	6
+4	1	8
+5	1	8
+6	1	8
+7	1	8
+8	1	8
+9	1	8
+10	1	11
+11	1	11
+12	1	11
+13	1	11
+14	1	11
+15	1	11
+16	1	11
+17	1	11
+18	1	11
+19	1	11
+20	2020	11
+21	2020	11
+22	1	13
+23	1	13
+24	1	13
+25	1	13
+26	1	13
+27	1	13
+28	1	13
+29	1	13
+30	1	13
+31	1	15
+32	2	15
+34	1	10
+35	11	10
+36	11	10
+37	11	10
+38	11	10
+39	11	10
+40	11	10
+41	11	10
+42	1	10
+43	1	10
+44	1	10
+45	1	10
+46	1	10
+47	1	10
+48	4	16
+49	1	14
+50	1	14
+51	1	7
+33	1	7
+52	1	10
+53	1	10
+54	1	10
+55	1	10
+56	1	10
+57	1	10
+58	1	10
+59	1	10
+60	1	10
+61	1	10
+62	1	10
+63	1	10
+64	1	10
+65	1	10
+66	1	10
+67	1	10
+69	1	10
+70	1	10
+71	1	10
+72	1	10
+73	1	10
+68	102	10
+75	1	9
+74	4	9
+76	1	5
+78	1	15
+77	6	15
+79	4	16
+80	1	9
+81	100	9
+82	2	6
 \.
 
 
@@ -858,18 +1184,18 @@ COPY public.products_order (id) FROM stdin;
 --
 
 COPY public.products_product (id, name, description, price_no_vat, vat, gtin, add_date, mod_date, amount, image) FROM stdin;
-6	Beretta 92fs	James Bond's gun of choice	2500	23	4o35u3u	2020-10-04	2020-10-04	90	beretta_5T2N7dz.jpg
-7	Push dagger	Win any fight	100	23	rwtet4	2020-10-04	2020-10-04	25	dagger_26gRdLD.jpeg
-8	Karambit	Oriental karambit knife	100	23	23irueq	2020-10-04	2020-10-04	40	karambit.jpeg
-9	Tomato	Bio Tomato	5	23	357395	2020-10-04	2020-10-04	1000	tomato.jpeg
-10	Carrot	no pesticides carrot	2	23	3u40fej	2020-10-04	2020-10-04	10000	carrot.jpeg
-11	Apple	Best apples in the word	3	23	3uoejfle	2020-10-04	2020-10-04	10000	apple.jpeg
+9	Tomato	Bio Tomato	5	23	357395	2020-10-04	2020-10-16	793	tomato.jpeg
+6	Beretta 92fs	James Bond's gun of choice	2500	23	4o35u3u	2020-10-04	2020-10-17	71	beretta_5T2N7dz.jpg
 12	Banana	Banana from Caraibes	10	23	wiegjirvn	2020-10-04	2020-10-04	100000	banana.jpeg
-13	Fan	cool in the summer	50	23	39feovv	2020-10-04	2020-10-04	50	fun.jpeg
-14	TV set	Wash your brain	5000	23	3irrjendwpkvw	2020-10-04	2020-10-04	10	tv.jpeg
-5	Glock gen 5	the newest version of legendary pistol	2000	23	A00000001	2020-10-04	2020-10-04	100	glock.jpeg
-15	Shower	ever be dirty again!	95	23	32ivnwkw	2020-10-04	2020-10-04	10	shower.jpeg
-16	Bathtub	Never stink again	500	23	eorjeowe	2020-10-04	2020-10-04	500	bath.jpeg
+8	Karambit	Oriental karambit knife	100	23	23irueq	2020-10-04	2020-10-12	34	karambit.jpeg
+14	TV set	Wash your brain	5000	23	3irrjendwpkvw	2020-10-04	2020-10-16	8	tv.jpeg
+7	Push dagger	Win any fight	100	23	rwtet4	2020-10-04	2020-10-16	22	dagger_26gRdLD.jpeg
+11	Apple	Best apples in the word	3	23	3uoejfle	2020-10-04	2020-10-12	9910	apple.jpeg
+13	Fan	cool in the summer	50	23	39feovv	2020-10-04	2020-10-12	13	fun.jpeg
+10	Carrot	no pesticides carrot	2	23	3u40fej	2020-10-04	2020-10-16	9865	carrot.jpeg
+5	Glock gen 5	the newest version of legendary pistol	2000	23	A00000001	2020-10-04	2020-10-16	98	glock_X469xib.jpeg
+15	Shower	ever be dirty again!	95	23	32ivnwkw	2020-10-04	2020-10-16	0	shower.jpeg
+16	Bathtub	Never stink again	500	23	eorjeowe	2020-10-04	2020-10-16	492	bath.jpeg
 \.
 
 
@@ -898,6 +1224,33 @@ COPY public.products_product_category (id, product_id, category_id) FROM stdin;
 --
 
 COPY public.products_rating (id, score, description, add_date, mod_date, product_id) FROM stdin;
+1	5	Very good	2020-10-04	2020-10-04	6
+2	4	Great	2020-10-04	2020-10-04	6
+3	5	Tasty	2020-10-04	2020-10-04	9
+4	4	Tasty	2020-10-04	2020-10-04	9
+5	1	Hate it	2020-10-04	2020-10-04	9
+\.
+
+
+--
+-- Data for Name: users_address; Type: TABLE DATA; Schema: public; Owner: kokot300
+--
+
+COPY public.users_address (id, address_line_1, address_line_2, city, zip_code, country, profile_id, name) FROM stdin;
+3	Strzelców 4A	m.131	Kraków	31422	Poland	1	adres 1
+6	Strzelców 4A	m.131	Kraków	31422	Poland	2	adres 4
+5	Strzelców 4A	m.131	Kraków	31422	Poland	2	adres 3
+4	Strzelców 4A	m.131	Kraków	31422	Poland	1	adres 2
+\.
+
+
+--
+-- Data for Name: users_userprofile; Type: TABLE DATA; Schema: public; Owner: kokot300
+--
+
+COPY public.users_userprofile (id, phone, birth_date, user_id) FROM stdin;
+1	122	1990-06-13	4
+2	23335425	1990-06-13	2
 \.
 
 
@@ -919,7 +1272,7 @@ SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kokot300
 --
 
-SELECT pg_catalog.setval('public.auth_permission_id_seq', 40, true);
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 52, true);
 
 
 --
@@ -933,7 +1286,7 @@ SELECT pg_catalog.setval('public.auth_user_groups_id_seq', 1, false);
 -- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kokot300
 --
 
-SELECT pg_catalog.setval('public.auth_user_id_seq', 1, true);
+SELECT pg_catalog.setval('public.auth_user_id_seq', 4, true);
 
 
 --
@@ -947,21 +1300,21 @@ SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kokot300
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 28, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 37, true);
 
 
 --
 -- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kokot300
 --
 
-SELECT pg_catalog.setval('public.django_content_type_id_seq', 10, true);
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 13, true);
 
 
 --
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kokot300
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 23, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 31, true);
 
 
 --
@@ -975,7 +1328,21 @@ SELECT pg_catalog.setval('public.products_category_id_seq', 9, true);
 -- Name: products_order_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kokot300
 --
 
-SELECT pg_catalog.setval('public.products_order_id_seq', 1, false);
+SELECT pg_catalog.setval('public.products_order_id_seq', 7, true);
+
+
+--
+-- Name: products_order_item_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kokot300
+--
+
+SELECT pg_catalog.setval('public.products_order_item_id_seq', 19, true);
+
+
+--
+-- Name: products_orderitem_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kokot300
+--
+
+SELECT pg_catalog.setval('public.products_orderitem_id_seq', 82, true);
 
 
 --
@@ -996,7 +1363,21 @@ SELECT pg_catalog.setval('public.products_product_id_seq', 16, true);
 -- Name: products_rating_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kokot300
 --
 
-SELECT pg_catalog.setval('public.products_rating_id_seq', 1, false);
+SELECT pg_catalog.setval('public.products_rating_id_seq', 5, true);
+
+
+--
+-- Name: users_address_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kokot300
+--
+
+SELECT pg_catalog.setval('public.users_address_id_seq', 6, true);
+
+
+--
+-- Name: users_userprofile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kokot300
+--
+
+SELECT pg_catalog.setval('public.users_userprofile_id_seq', 3, true);
 
 
 --
@@ -1144,11 +1525,35 @@ ALTER TABLE ONLY public.products_category
 
 
 --
+-- Name: products_order_item products_order_item_order_id_orderitem_id_cec4e8da_uniq; Type: CONSTRAINT; Schema: public; Owner: kokot300
+--
+
+ALTER TABLE ONLY public.products_order_item
+    ADD CONSTRAINT products_order_item_order_id_orderitem_id_cec4e8da_uniq UNIQUE (order_id, orderitem_id);
+
+
+--
+-- Name: products_order_item products_order_item_pkey; Type: CONSTRAINT; Schema: public; Owner: kokot300
+--
+
+ALTER TABLE ONLY public.products_order_item
+    ADD CONSTRAINT products_order_item_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: products_order products_order_pkey; Type: CONSTRAINT; Schema: public; Owner: kokot300
 --
 
 ALTER TABLE ONLY public.products_order
     ADD CONSTRAINT products_order_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: products_orderitem products_orderitem_pkey; Type: CONSTRAINT; Schema: public; Owner: kokot300
+--
+
+ALTER TABLE ONLY public.products_orderitem
+    ADD CONSTRAINT products_orderitem_pkey PRIMARY KEY (id);
 
 
 --
@@ -1189,6 +1594,30 @@ ALTER TABLE ONLY public.products_product
 
 ALTER TABLE ONLY public.products_rating
     ADD CONSTRAINT products_rating_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_address users_address_pkey; Type: CONSTRAINT; Schema: public; Owner: kokot300
+--
+
+ALTER TABLE ONLY public.users_address
+    ADD CONSTRAINT users_address_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_userprofile users_userprofile_pkey; Type: CONSTRAINT; Schema: public; Owner: kokot300
+--
+
+ALTER TABLE ONLY public.users_userprofile
+    ADD CONSTRAINT users_userprofile_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_userprofile users_userprofile_user_id_key; Type: CONSTRAINT; Schema: public; Owner: kokot300
+--
+
+ALTER TABLE ONLY public.users_userprofile
+    ADD CONSTRAINT users_userprofile_user_id_key UNIQUE (user_id);
 
 
 --
@@ -1290,6 +1719,41 @@ CREATE INDEX products_category_parent_category_id_784462d1 ON public.products_ca
 
 
 --
+-- Name: products_order_address_id_10a144ef; Type: INDEX; Schema: public; Owner: kokot300
+--
+
+CREATE INDEX products_order_address_id_10a144ef ON public.products_order USING btree (address_id);
+
+
+--
+-- Name: products_order_item_order_id_86687e23; Type: INDEX; Schema: public; Owner: kokot300
+--
+
+CREATE INDEX products_order_item_order_id_86687e23 ON public.products_order_item USING btree (order_id);
+
+
+--
+-- Name: products_order_item_orderitem_id_4cae2fc6; Type: INDEX; Schema: public; Owner: kokot300
+--
+
+CREATE INDEX products_order_item_orderitem_id_4cae2fc6 ON public.products_order_item USING btree (orderitem_id);
+
+
+--
+-- Name: products_order_user_id_dfb540d8; Type: INDEX; Schema: public; Owner: kokot300
+--
+
+CREATE INDEX products_order_user_id_dfb540d8 ON public.products_order USING btree (user_id);
+
+
+--
+-- Name: products_orderitem_item_id_ccae7cf7; Type: INDEX; Schema: public; Owner: kokot300
+--
+
+CREATE INDEX products_orderitem_item_id_ccae7cf7 ON public.products_orderitem USING btree (item_id);
+
+
+--
 -- Name: products_product_category_category_id_6bd7b606; Type: INDEX; Schema: public; Owner: kokot300
 --
 
@@ -1315,6 +1779,13 @@ CREATE INDEX products_product_gtin_e949bd03_like ON public.products_product USIN
 --
 
 CREATE INDEX products_rating_product_id_f60bd2d8 ON public.products_rating USING btree (product_id);
+
+
+--
+-- Name: users_address_profile_id_e071144f; Type: INDEX; Schema: public; Owner: kokot300
+--
+
+CREATE INDEX users_address_profile_id_e071144f ON public.users_address USING btree (profile_id);
 
 
 --
@@ -1398,6 +1869,46 @@ ALTER TABLE ONLY public.products_category
 
 
 --
+-- Name: products_order products_order_address_id_10a144ef_fk_users_address_id; Type: FK CONSTRAINT; Schema: public; Owner: kokot300
+--
+
+ALTER TABLE ONLY public.products_order
+    ADD CONSTRAINT products_order_address_id_10a144ef_fk_users_address_id FOREIGN KEY (address_id) REFERENCES public.users_address(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: products_order_item products_order_item_order_id_86687e23_fk_products_order_id; Type: FK CONSTRAINT; Schema: public; Owner: kokot300
+--
+
+ALTER TABLE ONLY public.products_order_item
+    ADD CONSTRAINT products_order_item_order_id_86687e23_fk_products_order_id FOREIGN KEY (order_id) REFERENCES public.products_order(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: products_order_item products_order_item_orderitem_id_4cae2fc6_fk_products_; Type: FK CONSTRAINT; Schema: public; Owner: kokot300
+--
+
+ALTER TABLE ONLY public.products_order_item
+    ADD CONSTRAINT products_order_item_orderitem_id_4cae2fc6_fk_products_ FOREIGN KEY (orderitem_id) REFERENCES public.products_orderitem(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: products_order products_order_user_id_dfb540d8_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: kokot300
+--
+
+ALTER TABLE ONLY public.products_order
+    ADD CONSTRAINT products_order_user_id_dfb540d8_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: products_orderitem products_orderitem_item_id_ccae7cf7_fk_products_product_id; Type: FK CONSTRAINT; Schema: public; Owner: kokot300
+--
+
+ALTER TABLE ONLY public.products_orderitem
+    ADD CONSTRAINT products_orderitem_item_id_ccae7cf7_fk_products_product_id FOREIGN KEY (item_id) REFERENCES public.products_product(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: products_product_category products_product_cat_category_id_6bd7b606_fk_products_; Type: FK CONSTRAINT; Schema: public; Owner: kokot300
 --
 
@@ -1419,6 +1930,22 @@ ALTER TABLE ONLY public.products_product_category
 
 ALTER TABLE ONLY public.products_rating
     ADD CONSTRAINT products_rating_product_id_f60bd2d8_fk_products_product_id FOREIGN KEY (product_id) REFERENCES public.products_product(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: users_address users_address_profile_id_e071144f_fk_users_userprofile_id; Type: FK CONSTRAINT; Schema: public; Owner: kokot300
+--
+
+ALTER TABLE ONLY public.users_address
+    ADD CONSTRAINT users_address_profile_id_e071144f_fk_users_userprofile_id FOREIGN KEY (profile_id) REFERENCES public.users_userprofile(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: users_userprofile users_userprofile_user_id_87251ef1_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: kokot300
+--
+
+ALTER TABLE ONLY public.users_userprofile
+    ADD CONSTRAINT users_userprofile_user_id_87251ef1_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --

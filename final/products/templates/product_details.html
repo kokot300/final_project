@@ -26,7 +26,8 @@
                     </li>
                     {% if user.is_authenticated %}
                         <li class="pure-menu-item">
-                            <form method="post" action="{% url 'add_to_card' %}" class="pure-form pure-form-stacked">
+                            <form method="post" action="{% url 'add_to_card
+                            ' %}" class="pure-form pure-form-stacked">
                                 {% csrf_token %}
                                 <input type="hidden" value="{{ object.pk }}" name="product" id="product"/>
                                 <label for="quantity">how much?</label>
