@@ -15,6 +15,22 @@ class GetOnlyViewsTest(TestCase):
     test simple views that support only get method
     """
 
+    def setUp(self):
+        """
+        creates a product
+        """
+
+        name = faker.first_name()
+        description = faker.last_name()
+        price_no_vat = random()
+        vat = 23
+        gtin = faker.ean(length=13)
+        amount = randint(1, 1000)
+        category = Category.objects.create(name=faker.first_name(), description=faker.last_name())
+        product = Product.objects.create(name=name, description=description, price_no_vat=price_no_vat, vat=vat,
+                                         gtin=gtin,
+                                         amount=amount)
+
     def test_get_to_root(self):
         """
         tests get method for root
@@ -71,6 +87,14 @@ class GetOnlyViewsTest(TestCase):
         response = self.client.post("/contact/")
         assert response.status_code == 405
 
+    def test_get_to_product_details(self):
+        """
+        tests post method for product details
+        """
+        product = Product.objects.first()
+        response = self.client.get(f"/products/{product.pk}/details/")
+        assert response.status_code == 200
+
 
 class AddToCardTest(TestCase):
     """
@@ -79,7 +103,7 @@ class AddToCardTest(TestCase):
 
     def setUp(self):
         """
-        creates products
+        creates products and 1 user
         """
         for _ in range(5):
             name = faker.first_name()
@@ -118,14 +142,39 @@ class AddToCardTest(TestCase):
         self.client.login(username=user.username, password='1234')
         response = self.client.post('/products/add_to_card/', data={'product': product.pk, 'quantity': 1, })
         after_count = OrderItem.objects.count()
+        #  that's ok scenario
         assert response.status_code == 302
         assert after_count - 1 == start_count
+
+        start_count = OrderItem.objects.count()
+        response = self.client.post('/products/add_to_card/', data={'product': 12345678901234567, 'quantity': 1, })
+        after_count = OrderItem.objects.count()
+        assert response.status_code == 404
+        #  product id given doesn't exist, no new record should be added
+        assert after_count == start_count
+
+        start_count = OrderItem.objects.count()
+        response = self.client.post('/products/add_to_card/',
+                                    data={'product': product.pk, 'quantity': (product.amount + 1), })
+        after_count = OrderItem.objects.count()
+        assert response.status_code == 302
+        #  you can't buy more quantity than it is available
+        assert after_count == start_count
+
+        start_count = OrderItem.objects.count()
+        response = self.client.post('/products/add_to_card/',
+                                    data={'product': product.pk, 'quantity': 0, })
+        after_count = OrderItem.objects.count()
+        assert response.status_code == 302
+        #  you can't buy less than 1
+        assert after_count == start_count
 
 
 class NewAddressTest(TestCase):
     """
     tests adding a new profile and new address
     """
+
     def setUp(self):
         """
         creates two users and one profile
