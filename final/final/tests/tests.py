@@ -1,6 +1,8 @@
 from random import randint, random
 
+import pytest
 from django.contrib.auth.models import User
+from django.db.utils import IntegrityError
 from django.test import TestCase
 from faker import Faker
 
@@ -197,6 +199,13 @@ class NewAddressTest(TestCase):
         count_profiles_after = UserProfile.objects.count()
         assert response.status_code == 302
         assert count_profiles_before == count_profiles_after - 1
+
+        #  you can't create more than one profile per user
+        with pytest.raises(IntegrityError):
+            response = self.client.post('/accounts/profile/create/', data={
+                'phone': 1234567890,
+                'birth_date': '1990-06-13',
+            })
 
     def test_add_address(self):
         """

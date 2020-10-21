@@ -61,7 +61,7 @@ class AddToCardView(LoginRequiredMixin, View):
         adds item to card or increases the number of ordered item. redirects to detail view of item
         """
         item = get_object_or_404(Product, pk=request.POST.__getitem__('product'))
-        if item.amount < int(request.POST.__getitem__('quantity')):
+        if item.amount < int(request.POST.__getitem__('quantity')) or int(request.POST.__getitem__('quantity')) < 1:
             return redirect(f"/products/{request.POST.__getitem__('product')}/details")
         else:
             item.amount -= int(request.POST.__getitem__('quantity'))
