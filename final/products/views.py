@@ -20,6 +20,7 @@ class ShopView(ListView):
     model = Product
     template_name = 'shop.html'
     paginate_by = 10
+    ordering = 'name'
 
 
 class CategoriesView(ListView):

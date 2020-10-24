@@ -49,9 +49,13 @@ class GetOnlyViewsTest(TestCase):
 
     def test_get_to_products(self):
         """
-        tests get method for /products/
+        tests get method for /products/ and checks if object_list is the correct
         """
         response = self.client.get("/products/")
+        products = Product.objects.all().order_by('name')
+        products = products[0:10]
+        products_list = [f'<Product: {product.name}>' for product in products]
+        self.assertQuerysetEqual(response.context['object_list'], products_list)
         assert response.status_code == 200
 
     def test_post_to_products(self):
@@ -90,11 +94,13 @@ class GetOnlyViewsTest(TestCase):
         assert response.status_code == 405
 
     def test_get_to_product_details(self):
+        #  compare context to object response.context object/ objectlist
         """
         tests post method for product details
         """
         product = Product.objects.first()
         response = self.client.get(f"/products/{product.pk}/details/")
+        self.assertContains(response=response, text=product.name, status_code=200)
         assert response.status_code == 200
 
 
